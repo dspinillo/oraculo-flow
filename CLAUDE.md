@@ -1,6 +1,6 @@
 # Oráculo Flow — convenção de projetos
 
-> Regras para todo desenvolvimento neste monorepo. Esqueletos: `templates/projeto/`. Criação de projeto: skill `/novo-projeto` ou `playbooks/novo-projeto.md`.
+> Regras para todo desenvolvimento nos seus projetos (funciona em monorepo ou um-repo-por-projeto — ver seção Git). Esqueletos e criação de projeto: skills `oraculo-flow:novo-projeto` / `oraculo-flow:migrar-projeto`.
 
 ## Docs por nível de porte
 
@@ -30,13 +30,22 @@ Fases `F0..Fn` → tarefas `TX.Y` (campos: **Objetivo · Passos · Critérios de
 
 ## Git
 
-- Projeto novo nasce em `projects/<slug>/` **dentro deste monorepo**. Exceção (repo standalone) exige ADR em `decisions/` da raiz.
+> A skill `instalar` apaga o modo que não se aplica a você.
+
+**Modo monorepo:**
+- Projeto novo nasce em `projects/<slug>/` **dentro do monorepo**. Exceção (repo standalone) exige ADR em `decisions/` da raiz.
 - Commits: Conventional Commits escopados por projeto — `feat(<slug>): ...`, `fix(<slug>): ...`. Um commit não mistura projetos.
+
+**Modo multi-repo (um repo por projeto):**
+- Projeto novo nasce como repo próprio (`git init` + remoto quando houver), com os docs do nível na raiz.
+- Commits: Conventional Commits simples — `feat: ...`, `fix: ...`.
+
+**Ambos:**
 - Nunca commitar sem o usuário pedir; nunca commitar segredos.
 
 ## ADRs
 
-Decisão de arquitetura/stack/pivô → `decisions/NNNN-slug.md` **no projeto** (formato: Contexto / Decisão / Consequências). Decisões que afetam o monorepo inteiro → `decisions/` da raiz. Não contrariar ADR vigente sem escrever o ADR que o substitui.
+Decisão de arquitetura/stack/pivô → `decisions/NNNN-slug.md` **no projeto** (formato: Contexto / Decisão / Consequências). No modo monorepo, decisões que afetam o monorepo inteiro → `decisions/` da raiz. Não contrariar ADR vigente sem escrever o ADR que o substitui.
 
 ## Protocolo de sessão
 

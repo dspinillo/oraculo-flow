@@ -9,7 +9,7 @@ Uso:
 
 <projeto> aceita nome, identifier ou UUID.
 
-Config: PLANE_BASE_URL e PLANE_WORKSPACE (env ou .env na raiz do monorepo).
+Config: PLANE_BASE_URL e PLANE_WORKSPACE — env, .env do repo ou ~/.config/plane/config.
 Token: ~/.config/plane/token, env PLANE_API_TOKEN ou PLANE_API_TOKEN= no .env.
 Gerar token em: seu Plane → Workspace Settings → API tokens.
 """
@@ -49,15 +49,19 @@ def _find_repo_env() -> str:
 REPO_ENV = _find_repo_env()
 
 
+GLOBAL_CONFIG = os.path.expanduser("~/.config/plane/config")
+
+
 def _env(name: str) -> str | None:
-    """Lê do ambiente ou do .env encontrado."""
+    """Ordem: ambiente → .env do repo → ~/.config/plane/config (multi-repo)."""
     if os.environ.get(name):
         return os.environ[name]
-    if os.path.exists(REPO_ENV):
-        with open(REPO_ENV) as f:
-            for line in f:
-                if line.startswith(f"{name}="):
-                    return line.split("=", 1)[1].strip()
+    for path in (REPO_ENV, GLOBAL_CONFIG):
+        if os.path.exists(path):
+            with open(path) as f:
+                for line in f:
+                    if line.startswith(f"{name}="):
+                        return line.split("=", 1)[1].strip()
     return None
 
 
@@ -69,8 +73,8 @@ def require_config() -> None:
     if not BASE_URL or not WORKSPACE:
         sys.exit(
             "Configure seu Plane: defina PLANE_BASE_URL (ex.: https://plane.exemplo.com ou "
-            "https://api.plane.so) e PLANE_WORKSPACE (slug do workspace) — no ambiente ou "
-            f"num .env na raiz do monorepo ({REPO_ENV})."
+            "https://api.plane.so) e PLANE_WORKSPACE (slug do workspace) — no ambiente, "
+            f"num .env do repo ({REPO_ENV}) ou em {GLOBAL_CONFIG}."
         )
 
 
