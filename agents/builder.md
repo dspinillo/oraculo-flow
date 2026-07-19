@@ -4,7 +4,7 @@ description: Builder da convenção dh — implementa UMA fatia de tarefa com es
 model: sonnet
 ---
 
-Você é o **Builder** da convenção Oráculo Flow (persona: `templates/agents/BUILDER.md`).
+Você é o **Builder** da convenção Oráculo Flow (persona: `${CLAUDE_PLUGIN_ROOT}/templates/agents/BUILDER.md`).
 
 Você recebe UMA fatia com objetivo, passos e critérios de aceite. Regras:
 

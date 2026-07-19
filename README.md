@@ -27,32 +27,51 @@ ideia ──▶ /novo-projeto ──▶ F0: plano visual ──▶ você aprova 
 5. **Orquestração multi-agente** — a sessão principal é o Manager (nunca coda direto); planner/builder/tester/documenter são subagents com contrato de entrada/saída. Confronto entre Claude e GPT é padrão em tarefa ambígua: dois planos às cegas, divergência = sinal de risco. Ver `templates/agents/WORKFLOW.md`.
 6. **Protocolo de sessão** — ao encerrar, STATUS ganha o "Onde paramos" e a sessão anterior colapsa em `<details>`; o histórico inteiro fica preservado e o topo fica legível.
 
+## Instalação (plugin do Claude Code)
+
+Dentro do Claude Code:
+
+```
+/plugin marketplace add dspinillo/oraculo-flow
+/plugin install oraculo-flow@oraculo-flow
+```
+
+Depois, na raiz do seu monorepo:
+
+```
+/oraculo-flow:instalar        # coloca o CLAUDE.md com as regras + estrutura + Plane opcional
+/oraculo-flow:novo-projeto    # cria seu primeiro projeto (mande o briefing junto!)
+/oraculo-flow:migrar-projeto  # traz um projeto existente para o padrão
+```
+
+Os agentes (`planner`, `builder`, `tester`, `documenter`) ficam disponíveis automaticamente como subagents após a instalação.
+
+Requisitos: [Claude Code](https://claude.com/claude-code); Python 3.10+ para o CLI do Plane (opcional); plugin Codex (opcional) para o confronto entre LLMs.
+
 ## Estrutura deste repo
 
 ```
 oraculo-flow/
-├── CLAUDE.md               # as regras (vai para a raiz do SEU monorepo)
+├── .claude-plugin/
+│   ├── plugin.json         # manifest do plugin
+│   └── marketplace.json    # este repo é o próprio marketplace
+├── CLAUDE.md               # as regras (a skill instalar copia p/ raiz do SEU monorepo)
+├── skills/
+│   ├── instalar/           # setup do monorepo (rodar 1x)
+│   ├── novo-projeto/       # criação de projeto de ponta a ponta
+│   └── migrar-projeto/     # retrofit de projeto existente
+├── agents/                 # planner, builder, tester, documenter (subagents)
 ├── templates/
 │   ├── projeto/            # esqueletos: README, STATUS, HANDOFF, ROADMAP, PRD,
 │   │                       #   ARCHITECTURE, CHANGELOG, CLAUDE.md, ADR, plano-visual
 │   └── agents/             # WORKFLOW + personas Manager/Planner/Builder/Tester/Documenter
-├── playbooks/
-│   ├── novo-projeto.md     # checklist de criação (o que a skill automatiza)
-│   └── migrar-projeto.md   # retrofit de projeto existente, sob demanda
-├── scripts/plane.py        # CLI da API do Plane (stdlib pura): projetos + issues
-└── .claude/
-    ├── skills/novo-projeto # skill /novo-projeto para o Claude Code
-    └── agents/             # planner, builder, tester, documenter executáveis
+├── playbooks/              # checklists manuais (funcionam fora do Claude Code também)
+└── scripts/plane.py        # CLI da API do Plane (stdlib pura): projetos + issues
 ```
 
-## Como adotar
+## Configurar o Plane (opcional)
 
-1. **Copie para o seu monorepo**: `CLAUDE.md`, `templates/`, `playbooks/`, `scripts/` e `.claude/` para a raiz. Projetos vivem em `projects/<slug>/`.
-2. **Configure o Plane** (opcional — dá para usar tudo sem ele): crie um `.env` na raiz com `PLANE_BASE_URL=...` e `PLANE_WORKSPACE=...` (self-hosted ou `https://api.plane.so`), gere um API token no Plane e salve em `~/.config/plane/token`. Teste: `python3 scripts/plane.py list-projects`.
-3. **Ajuste o CLAUDE.md** ao seu contexto (tipos de projeto que você usa, regras de commit, modelos preferidos).
-4. **Crie o primeiro projeto**: abra o Claude Code na raiz e rode `/novo-projeto` com seu briefing — ideia, prints de referência, restrições, tudo. A skill pergunta o que faltar, monta a estrutura, publica o plano visual e para na sua aprovação.
-
-Requisitos: [Claude Code](https://claude.com/claude-code) (skills + subagents); Python 3.10+ para o `scripts/plane.py`; plugin Codex (opcional) para o confronto entre LLMs.
+Tudo funciona sem Plane. Para usar: `.env` na raiz do seu monorepo com `PLANE_BASE_URL=...` (self-hosted ou `https://api.plane.so`) e `PLANE_WORKSPACE=...`; API token gerado no Plane salvo em `~/.config/plane/token`. A skill `instalar` guia isso.
 
 ## Filosofia
 

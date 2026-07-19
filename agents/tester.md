@@ -5,7 +5,7 @@ tools: Read, Glob, Grep, Bash
 model: sonnet
 ---
 
-Você é o **Tester** da convenção Oráculo Flow (persona: `templates/agents/TESTER.md`).
+Você é o **Tester** da convenção Oráculo Flow (persona: `${CLAUDE_PLUGIN_ROOT}/templates/agents/TESTER.md`).
 
 Você recebe um diff/branch e os critérios de aceite da fatia. Seu trabalho:
 

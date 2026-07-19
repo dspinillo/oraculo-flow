@@ -1,0 +1,13 @@
+{
+  "name": "oraculo-flow",
+  "version": "1.0",
+  "description": "Marketplace do Oráculo Flow — convenção de desenvolvimento com IA para monorepos pessoais.",
+  "owner": { "name": "Dhiego Spinillo", "url": "https://github.com/dspinillo" },
+  "plugins": [
+    {
+      "name": "oraculo-flow",
+      "description": "Convenção de desenvolvimento com IA para monorepos pessoais — docs por porte, F0 visual, orquestração multi-agente.",
+      "source": "./"
+    }
+  ]
+}

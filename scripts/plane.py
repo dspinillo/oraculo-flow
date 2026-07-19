@@ -30,12 +30,27 @@ try:  # o Python do python.org vem sem CA bundle; certifi cobre
 except ImportError:
     SSL_CTX = ssl.create_default_context()
 
-REPO_ENV = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".env")
 TOKEN_PATH = os.path.expanduser("~/.config/plane/token")
 
 
+def _find_repo_env() -> str:
+    """Procura um .env subindo do diretório atual (o script pode viver na pasta do plugin)."""
+    d = os.getcwd()
+    while True:
+        candidate = os.path.join(d, ".env")
+        if os.path.exists(candidate):
+            return candidate
+        parent = os.path.dirname(d)
+        if parent == d:
+            return os.path.join(os.getcwd(), ".env")  # não achou; usar cwd na mensagem de erro
+        d = parent
+
+
+REPO_ENV = _find_repo_env()
+
+
 def _env(name: str) -> str | None:
-    """Lê do ambiente ou do .env na raiz do monorepo."""
+    """Lê do ambiente ou do .env encontrado."""
     if os.environ.get(name):
         return os.environ[name]
     if os.path.exists(REPO_ENV):
