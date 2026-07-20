@@ -22,7 +22,7 @@ Deixar os docs verdadeiros ao fim de cada fatia/ciclo: CHANGELOG, STATUS, HANDOF
 
 ## Saída esperada
 
-- CHANGELOG com entrada escopada (comportamento + migração + como foi testado); STATUS."Onde paramos" atualizado e sessão anterior colapsada em `<details>`; HANDOFF ajustado se a retomada mudou; ADR novo se houve decisão de arquitetura.
+- CHANGELOG com entrada escopada (comportamento + migração + como foi testado); STATUS."Onde paramos" atualizado e sessão anterior colapsada em `<details>`; HANDOFF ajustado se a retomada mudou; ADR novo se houve decisão de arquitetura; **LESSONS.md** se o ciclo ensinou algo não-óbvio (erro que custou caro, padrão que funcionou, armadilha de ambiente).
 
 ## Validação mínima
 

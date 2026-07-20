@@ -32,14 +32,17 @@ ideia ──▶ /novo-projeto ──▶ F0: plano visual ──▶ você aprova 
 
 ### Agentes (subagents)
 
-| Agente | Seu especialista | O que faz |
-|---|---|---|
-| `planner` | Arquiteto | Transforma UMA tarefa ambígua em plano executável: paths exatos verificados no código real, ordem, o que reusar, riscos. Não escreve código. |
-| `builder` | Dev sênior | Implementa UMA fatia com critérios de aceite definidos. Diff pequeno no padrão do código vizinho, build rodado com saída real anexada. Relata honestamente o que não validou. |
-| `tester` | QA | Veredito PASSOU/FALHOU por critério de aceite, com comando e saída. Tenta casos de borda, checa regressão. Não corrige — reporta. "O build passou" não é critério de aceite. |
-| `documenter` | Tech writer | Fecha o ciclo: CHANGELOG, STATUS ("onde paramos"), HANDOFF, ADRs. Só documenta o que tem evidência do tester — nunca o otimismo do builder. |
+Cada papel responde uma pergunta:
 
-O **Manager** é a sua própria sessão principal: fatia, distribui, revisa e nunca coda direto. O fluxo completo, a matriz de quando usar qual agente e os anti-patterns estão em [`templates/agents/WORKFLOW.md`](templates/agents/WORKFLOW.md).
+| Agente | Pergunta que responde | O que faz |
+|---|---|---|
+| `architect` | Isso mantém a arquitetura saudável? | **Gatilhado** (só em mudança estrutural ou N3): avalia impacto em contratos, módulos, dependências. Distinto do planner — ele cuida do *sistema*, não da tarefa. Dívida aceita vira ADR. |
+| `planner` | Como implementar esta tarefa? | Transforma UMA tarefa ambígua em plano executável: paths exatos verificados no código real, ordem, o que reusar, riscos. Não escreve código. |
+| `builder` | Como escrever o código? | Implementa UMA fatia com critérios de aceite definidos. Diff pequeno no padrão do código vizinho, build rodado com saída real anexada. Relata honestamente o que não validou. |
+| `tester` | Funciona de verdade? | Veredito PASSOU/FALHOU por critério de aceite, com comando e saída. Tenta casos de borda, checa regressão. Não corrige — reporta. "O build passou" não é critério de aceite. |
+| `documenter` | O conhecimento foi preservado? | Fecha o ciclo: CHANGELOG, STATUS ("onde paramos"), HANDOFF, ADRs e **LESSONS**. Só documenta o que tem evidência do tester — nunca o otimismo do builder. |
+
+O **Manager** (que pergunta *o que devemos fazer?*) é a sua própria sessão principal: fatia, distribui, revisa e nunca coda direto. O `architect` e o confronto com o Codex são **gatilhados, não fixos** — cerimônia só quando a mudança é estrutural. O fluxo completo, a matriz de quando usar qual agente e os anti-patterns estão em [`templates/agents/WORKFLOW.md`](templates/agents/WORKFLOW.md).
 
 ### Docs (templates)
 
@@ -52,6 +55,7 @@ Cada doc responde UMA pergunta — e só ela. É isso que impede a documentaçã
 | `HANDOFF.md` | Como retomo amanhã sem perder o fio? | N2+ |
 | `ROADMAP.md` | O que vem, em que ordem? | N2+ |
 | `decisions/` | Por que é assim? (ADRs numerados, com o porquê) | N2+ |
+| `LESSONS.md` | O que já erramos e aprendemos? (viaja com o repo) | N2+ |
 | `ARCHITECTURE.md` | Como funciona por dentro? | N3 |
 | `PRD.md` | O que o produto é — e o que decidimos que NÃO é? | N3 |
 | `CHANGELOG.md` | O que entrou de fato? (fonte de verdade; checkboxes mentem, ele não) | N3 |

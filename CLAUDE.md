@@ -7,7 +7,7 @@
 | Nível | Quando | Docs obrigatórios |
 |---|---|---|
 | **N1** experimento | ideia em teste, pode morrer | `README.md` + `STATUS.md` |
-| **N2** projeto ativo (default) | vai ser usado de verdade | N1 + `HANDOFF.md`, `ROADMAP.md`, `decisions/` |
+| **N2** projeto ativo (default) | vai ser usado de verdade | N1 + `HANDOFF.md`, `ROADMAP.md`, `decisions/`, `LESSONS.md` |
 | **N3** produto | instalado em aparelho de terceiros, ou multi-frente | N2 + `ARCHITECTURE.md`, `PRD.md`, `CHANGELOG.md`, `CLAUDE.md` próprio |
 
 Promoção de nível cruza o critério → registrar como ADR do projeto. Em N3, **CHANGELOG.md é a fonte de verdade do que entrou**; checkboxes de planos podem mentir, ele não.
@@ -57,16 +57,25 @@ Ao **abrir** sessão num projeto: ler `STATUS.md` → `HANDOFF.md` → tarefa at
 4. `CHANGELOG.md` se N3.
 5. Projeto **fora do padrão**? Propor migração (`playbooks/migrar-projeto.md`) antes de aprofundar.
 
-## Memória
+## Segredos
 
-Projeto novo ganha memory file `<slug>-project.md` no auto-memory + linha no MEMORY.md. Memória guarda só o não-derivável do repo: paths, package/applicationId, armadilhas de aparelho, estado de fase. O resto vive nos docs do projeto.
+- Fonte única: chaves de API e tokens vivem no `.env` da raiz (monorepo) ou em `~/.config/` (multi-repo) — **fora do git** (confira o `.gitignore`). Uma chave, um lugar.
+- App que embarca a chave: o `.env` é a fonte, mas a injeção segue a plataforma (Android: `local.properties` → `BuildConfig`; nunca hardcoded em código, que vai parar no binário e no git).
+- Docs registram o **nome** da variável e onde obtê-la, **nunca o valor** (ex.: "requer `X_API_KEY` no `.env`; gerar em ...").
+
+## Memória e lições
+
+- **Auto-memory** (`~/.claude/.../memory/`): o não-derivável do repo que é seu e atravessa projetos — paths, package, armadilhas de aparelho, preferências. Fica com você, não viaja no repo.
+- **LESSONS.md** (no projeto): o conhecimento que **deve** viajar com o repo — erros que custaram caro, padrões que funcionaram, armadilhas de ambiente. Agentes consultam antes de começar; o Documenter registra ao fim de um ciclo que ensinou algo. É o que faz uma lição chegar a outra pessoa/máquina que clone o projeto.
+- Projeto novo ganha memory file `<slug>-project.md` no auto-memory + linha no MEMORY.md.
 
 ## Orquestração multi-agente
 
-Para N3 ou tarefa multi-frente (N1 nunca): fluxo e contratos em `templates/agents/WORKFLOW.md`; agentes executáveis `planner`, `builder`, `tester`, `documenter` em `.claude/agents/`. Regras mínimas:
+Para N3 ou tarefa multi-frente (N1 nunca): fluxo, papéis e contratos em `templates/agents/WORKFLOW.md`; agentes executáveis `architect`, `planner`, `builder`, `tester`, `documenter`. Regras mínimas:
 
 - Manager (a sessão principal) fatia e revisa; **não coda direto**.
-- Handoff: entra tarefa TX.Y + critérios de aceite; sai diff + evidência de teste (comando + saída real).
-- Modelos (assinatura com uso alto, sem economizar): **Fable pensa** (Manager + Planner), **Sonnet produz** (Builder/Tester/Documenter), **Codex confronta**. Fatia crítica escala Builder para Fable.
-- **Confronto com Codex é padrão** (limites altíssimos): plano ambíguo → Fable e Codex planejam às cegas e o Manager compara; bug difícil → investigação paralela; fatia crítica → Codex como 2º tester. Divergência entre os dois = sinal de risco, investigar antes de codar.
+- **Architect é gatilhado, não fixo**: entra só quando a tarefa é estrutural (contrato, módulo, schema, dependência) ou em N3 — responde *isso mantém a arquitetura saudável*, distinto do Planner (*como implementar*). Tarefa trivial não convoca Architect.
+- Handoff: entra tarefa TX.Y + critérios de aceite; sai diff + evidência de teste (comando + saída real). Builder/Planner consultam LESSONS.md antes de começar.
+- Modelos (assinatura com uso alto, sem economizar): **Fable pensa** (Manager + Architect + Planner), **Sonnet produz** (Builder/Tester/Documenter), **Codex confronta**. Fatia crítica escala Builder para Fable.
+- **Confronto com Codex é padrão** (limites altíssimos): decisão estrutural e plano ambíguo → Fable e Codex às cegas e o Manager compara; bug difícil → investigação paralela; fatia crítica → Codex como 2º tester. Divergência entre os dois = sinal de risco, investigar antes de codar.
 - Trabalho distribuído referencia issue do Plane; Manager fecha a issue após merge.

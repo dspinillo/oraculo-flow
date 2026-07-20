@@ -1,6 +1,21 @@
-# Workflow multi-agente — dh
+# Workflow multi-agente
 
-> Generalizado do `diario-maternidade/docs/agents/`. Personas agnósticas de LLM: o papel define o contrato, não o modelo. Hoje: Claude (modelo por porte da tarefa) + GPT via plugin Codex. Ativar em projetos N3 ou tarefas multi-frente — experimento N1 não paga esse overhead.
+> Personas agnósticas de LLM: o papel define o contrato, não o modelo. Hoje: Claude (modelo por porte da tarefa) + GPT via plugin Codex. Ativar em projetos N3 ou tarefas multi-frente — experimento N1 não paga esse overhead.
+
+## Papéis e a pergunta que cada um responde
+
+| Papel | A pergunta | Quando entra | Executor default | Doc |
+|---|---|---|---|---|
+| **Manager** | O que devemos fazer agora? | sempre (é a sessão principal) | Fable | `MANAGER.md` |
+| **Architect** | Isso mantém a arquitetura saudável? | só quando a tarefa toca contrato/módulo/schema/dependência, ou em N3 | Fable + Codex em confronto | `ARCHITECT.md` |
+| **Planner** | Como implementar esta tarefa? | tarefa ambígua ou 3+ arquivos | Fable | `PLANNER.md` |
+| **Builder** | Como escrever o código? | toda fatia | Sonnet; Codex em confronto | `BUILDER.md` |
+| **Tester** | Funciona de verdade? | fim de toda fatia | Sonnet; Codex 2º tester em fatia crítica | `TESTER.md` |
+| **Documenter** | O conhecimento foi preservado? | fim de ciclo | Sonnet | `DOCUMENTER.md` |
+
+> Racional de modelo (assinatura com uso alto): Fable pensa, Sonnet 5 produz, **Codex confronta**. Opus 4.8 é geração anterior ao Sonnet 5 — não é o degrau acima; o degrau acima é Fable.
+>
+> **Architect e Planner são distintos**: o Planner responde *como implementar esta tarefa*; o Architect responde *esta tarefa mantém o sistema saudável* (bounded contexts, contratos, dependências, impacto estrutural). Na maioria das tarefas o Planner basta — chame o Architect só quando a mudança é estrutural. Não é papel fixo no pipeline.
 
 ## Fluxo
 
@@ -10,6 +25,12 @@
                  └──────┬──────┘
         fatia TX.Y + critérios de aceite
                         │
+              ┌ (só se estrutural) ┐
+              ▼                     │
+        ┌───────────┐              │
+        │ ARCHITECT │──── ok ──────┤
+        └───────────┘              │
+                        ▼
         ┌───────────────┼────────────────┐
         ▼               ▼                ▼
    ┌─────────┐    ┌──────────┐     ┌──────────┐
@@ -18,37 +39,27 @@
     plano técnico   diff em             │ evidência de teste
                     worktree/branch     ▼
                                   ┌──────────────┐
-                                  │  DOCUMENTER  │──▶ STATUS/CHANGELOG/ADR
+                                  │  DOCUMENTER  │──▶ STATUS/CHANGELOG/ADR/LESSONS
                                   └──────────────┘
                         ▼
               MANAGER revisa → merge → sync docs → fecha issue no Plane
 ```
 
-## Papéis
-
-| Papel | Foco | Executor default | Doc |
-|---|---|---|---|
-| Manager | fatiar, distribuir, revisar, sync de docs | sessão principal (Fable) | `MANAGER.md` |
-| Planner | plano técnico de UMA tarefa | Fable (raciocínio máximo, volume baixo) | `PLANNER.md` |
-| Builder | implementar UMA fatia que builda | Sonnet (workhorse da geração 5); Codex em confronto | `BUILDER.md` |
-| Tester | validar critérios de aceite, tentar quebrar | Sonnet; Codex como 2º tester em fatia crítica | `TESTER.md` |
-| Documenter | STATUS/CHANGELOG/ADR pós-fatia | Sonnet | `DOCUMENTER.md` |
-
-> Racional (assinatura com uso alto): Fable pensa, Sonnet 5 produz, **Codex confronta**. Opus 4.8 é geração anterior ao Sonnet 5 — não é o degrau acima; o degrau acima é Fable.
-
 ## Confronto com GPT (Codex) — quando é PADRÃO, não exceção
 
 Os limites do Codex são altíssimos; usar de graça o segundo cérebro é regra:
 
-1. **Plano de tarefa ambígua/crítica**: Planner (Fable) e Codex planejam em paralelo, às cegas; Manager compara e funde. Divergência entre os dois é sinal de risco — investigar antes de codar.
-2. **Diagnóstico difícil**: Claude e Codex investigam o mesmo bug em paralelo com o mesmo material.
-3. **Fatia crítica** (schema/migração, alarmes, cripto, dinheiro): Codex roda como segundo tester independente antes do merge.
-4. **Review de PR grande**: Codex revisa o diff que o Manager já revisou.
+1. **Decisão estrutural**: Architect (Fable) e Codex avaliam o impacto em paralelo, às cegas; divergência entre os dois é sinal de risco — investigar antes de codar.
+2. **Plano de tarefa ambígua/crítica**: Planner (Fable) e Codex planejam em paralelo; Manager compara e funde.
+3. **Diagnóstico difícil**: Claude e Codex investigam o mesmo bug em paralelo com o mesmo material.
+4. **Fatia crítica** (schema/migração, alarmes, cripto, dinheiro): Codex roda como segundo tester independente antes do merge.
+5. **Review de PR grande**: Codex revisa o diff que o Manager já revisou.
 
 ## Contrato de handoff entre papéis
 
 - **Entra**: tarefa `TX.Y` com Objetivo, Passos, Critérios de aceite, Depende de + paths relevantes. Nunca "dá uma olhada no projeto".
 - **Sai**: diff (ou plano/relatório) + evidência de validação (comando rodado e saída real). Sem evidência = não está pronto.
+- Antes de começar, o Builder/Planner consulta `LESSONS.md` do projeto (erros e padrões já aprendidos). Ao fim, se o ciclo ensinou algo não-óbvio, o Documenter registra lá.
 - Todo trabalho distribuído referencia a issue do Plane; quem fecha a issue é o Manager, depois do merge.
 
 ## Quando usar qual agente
@@ -56,6 +67,7 @@ Os limites do Codex são altíssimos; usar de graça o segundo cérebro é regra
 | Situação | Use |
 |---|---|
 | Tarefa clara, 1-3 arquivos | Builder direto, sem Planner |
+| Mudança estrutural (contrato, módulo, schema, dependência) | Architect (Fable+Codex) antes de tudo |
 | Tarefa ambígua ou multi-arquivo | Planner (Fable) + Codex em confronto antes do Builder |
 | Bug difícil | Claude e Codex em paralelo com o mesmo material |
 | Fatias independentes | Builders em paralelo, worktrees isoladas |
@@ -65,10 +77,12 @@ Os limites do Codex são altíssimos; usar de graça o segundo cérebro é regra
 ## Anti-patterns
 
 - Manager implementando "só essa coisinha" direto — vira sessão-monólito de novo.
+- Architect convocado para tarefa trivial — cerimônia que mata velocidade; ele é gatilhado, não obrigatório.
 - Builder recebendo a fase inteira em vez de uma fatia — diffs gigantes, review impossível.
 - Documenter inventando estado — ele documenta a evidência do Tester, não o otimismo do Builder.
 - Dois builders na mesma área de código sem worktree — conflito garantido.
 - Pular o Tester porque "o build passou" — build não é critério de aceite.
+- Repetir um erro que já está no `LESSONS.md` — a lição existe justamente para isso.
 
 ## Fontes de verdade (ordem prática)
 
@@ -78,4 +92,5 @@ Os limites do Codex são altíssimos; usar de graça o segundo cérebro é regra
 | Onde paramos? | STATUS.md → "Onde paramos" |
 | Como retomar? | HANDOFF.md |
 | Por que é assim? | decisions/ |
+| O que já erramos/aprendemos? | LESSONS.md |
 | O que vem? | ROADMAP.md + Plane |
