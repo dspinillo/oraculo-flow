@@ -95,3 +95,16 @@ Os limites do Codex são altíssimos; usar de graça o segundo cérebro é regra
 | Por que é assim? | decisions/ |
 | O que já erramos/aprendemos? | LESSONS.md |
 | O que vem? | ROADMAP.md + Plane |
+
+## Roadmap de autonomia (gatilhos registrados — NÃO construir sem dor real)
+
+Hoje o Manager é humano e o merge é humano. Dois degraus de autonomia estão desenhados e propositalmente adiados — cada um remove o humano de um lugar diferente. Registrados aqui para não reconstruir o raciocínio quando doer.
+
+| Degrau | O que automatiza | Onde o humano continua | Guardrails obrigatórios no dia |
+|---|---|---|---|
+| **1. Daemon** (maestro Fase 2) | o **dispatch**: enfileira tarefas, roda rodadas sozinho, notifica | escolhe o vencedor e mescla (aprovação assíncrona) | fila local; notificação; **nunca** auto-merge/commit |
+| **2. Manager-agente** (loop engineer) | o **julgamento**: consolida laudos, prioriza correções, itera `auditar→corrigir→reauditar` | o merge do branch pronto (salvo exceção consciente) | **teto de iteração** + detecção de oscilação (diff volta N == N-2 → para e chama humano); **portão de merge** humano |
+
+Condição de parada de qualquer loop = **critérios de aceite da TX.Y** + teste verde, nunca "o modelo achou que acabou". Graders = Tester + Design-parity + confronto Codex, **independentes do executor**.
+
+**Risco central do degrau 2**: um loop autônomo tende a *gamear o próprio grader* — otimiza pra "passar", não pra "estar certo". Só se mitiga com graders que o executor não controla (Tester/Design-parity independentes, confronto Codex) e com o olho humano no merge. Mitiga, não elimina — é a razão de o portão de merge ser inegociável até prova em contrário.
