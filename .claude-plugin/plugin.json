@@ -1,7 +1,7 @@
 {
   "name": "oraculo-flow",
   "displayName": "Oráculo Flow",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Convenção de desenvolvimento com IA para monorepos pessoais: docs por porte, plano visual antes de código, fatiamento com contrato, issues no Plane e orquestração multi-agente com confronto entre LLMs.",
   "author": { "name": "Dhiego Spinillo", "url": "https://github.com/dspinillo" },
   "homepage": "https://github.com/dspinillo/oraculo-flow",

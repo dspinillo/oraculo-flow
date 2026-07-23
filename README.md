@@ -40,6 +40,7 @@ Cada papel responde uma pergunta:
 | `planner` | Como implementar esta tarefa? | Transforma UMA tarefa ambígua em plano executável: paths exatos verificados no código real, ordem, o que reusar, riscos. Não escreve código. |
 | `builder` | Como escrever o código? | Implementa UMA fatia com critérios de aceite definidos. Diff pequeno no padrão do código vizinho, build rodado com saída real anexada. Relata honestamente o que não validou. |
 | `tester` | Funciona de verdade? | Veredito PASSOU/FALHOU por critério de aceite, com comando e saída. Tenta casos de borda, checa regressão. Não corrige — reporta. "O build passou" não é critério de aceite. |
+| `design-parity` | O entregue bate com o design aprovado? | **Gatilhado** (fim de fase de UI): audita a fidelidade da UI entregue contra os mockups do F0 / tokens. Divergências concretas por componente com severidade — não redesenha, não dá selo de "fidelidade total". |
 | `documenter` | O conhecimento foi preservado? | Fecha o ciclo: CHANGELOG, STATUS ("onde paramos"), HANDOFF, ADRs e **LESSONS**. Só documenta o que tem evidência do tester — nunca o otimismo do builder. |
 
 O **Manager** (que pergunta *o que devemos fazer?*) é a sua própria sessão principal: fatia, distribui, revisa e nunca coda direto. O `architect` e o confronto com o Codex são **gatilhados, não fixos** — cerimônia só quando a mudança é estrutural. O fluxo completo, a matriz de quando usar qual agente e os anti-patterns estão em [`templates/agents/WORKFLOW.md`](templates/agents/WORKFLOW.md).

@@ -11,6 +11,7 @@
 | **Planner** | Como implementar esta tarefa? | tarefa ambígua ou 3+ arquivos | Fable | `PLANNER.md` |
 | **Builder** | Como escrever o código? | toda fatia | Sonnet; Codex em confronto | `BUILDER.md` |
 | **Tester** | Funciona de verdade? | fim de toda fatia | Sonnet; Codex 2º tester em fatia crítica | `TESTER.md` |
+| **Design-parity** | O entregue bate com o design aprovado? | gatilhado: fim de fase de UI | Fable; ótimo em confronto N-vias | `DESIGN_PARITY.md` |
 | **Documenter** | O conhecimento foi preservado? | fim de ciclo | Sonnet | `DOCUMENTER.md` |
 
 > Racional de modelo (assinatura com uso alto): Fable pensa, Sonnet 5 produz, **Codex confronta**. Opus 4.8 é geração anterior ao Sonnet 5 — não é o degrau acima; o degrau acima é Fable.
