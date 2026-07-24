@@ -57,6 +57,7 @@ Cada doc responde UMA pergunta — e só ela. É isso que impede a documentaçã
 | `ROADMAP.md` | O que vem, em que ordem? | N2+ |
 | `decisions/` | Por que é assim? (ADRs numerados, com o porquê) | N2+ |
 | `LESSONS.md` | O que já erramos e aprendemos? (viaja com o repo) | N2+ |
+| `CONTEXT.md` | Que termos o domínio usa? (linguagem ubíqua) | N2+ |
 | `ARCHITECTURE.md` | Como funciona por dentro? | N3 |
 | `PRD.md` | O que o produto é — e o que decidimos que NÃO é? | N3 |
 | `CHANGELOG.md` | O que entrou de fato? (fonte de verdade; checkboxes mentem, ele não) | N3 |
@@ -106,11 +107,11 @@ oraculo-flow/
 │   ├── instalar/           # setup do monorepo (rodar 1x)
 │   ├── novo-projeto/       # criação de projeto de ponta a ponta
 │   └── migrar-projeto/     # retrofit de projeto existente
-├── agents/                 # planner, builder, tester, documenter (subagents)
+├── agents/                 # architect, planner, builder, tester, design-parity, documenter
 ├── templates/
-│   ├── projeto/            # esqueletos: README, STATUS, HANDOFF, ROADMAP, PRD,
-│   │                       #   ARCHITECTURE, CHANGELOG, CLAUDE.md, ADR, plano-visual
-│   └── agents/             # WORKFLOW + personas Manager/Planner/Builder/Tester/Documenter
+│   ├── projeto/            # esqueletos: README, STATUS, HANDOFF, ROADMAP, PRD, ARCHITECTURE,
+│   │                       #   CHANGELOG, CLAUDE.md, ADR, LESSONS, CONTEXT, plano-visual
+│   └── agents/             # WORKFLOW + personas (Manager/Architect/Planner/Builder/Tester/Design-parity/Documenter)
 ├── playbooks/              # checklists manuais (funcionam fora do Claude Code também)
 └── scripts/plane.py        # CLI da API do Plane (stdlib pura): projetos + issues
 ```
@@ -127,6 +128,7 @@ Este método foi destilado de um projeto real que acumulou 37 ADRs, 100+ KB de c
 - **"Honestidade de escopo"** como seção formal do PRD (o que está pela metade, o que decidimos não fazer).
 - **Evidência em vez de adjetivo**: nada é "feito" sem comando + saída real. O tester existe porque "o build passou" não é critério de aceite.
 - **Docs com dono único**: cada fato vive num arquivo só; os outros linkam.
+- **Linguagem ubíqua** (`CONTEXT.md`): o vocabulário do domínio fixado num lugar — naming consistente entre agentes, menos token gasto re-explicando termo. Ideia inspirada em [mattpocock/skills](https://github.com/mattpocock/skills).
 
 ## Licença
 

@@ -94,6 +94,7 @@ Os limites do Codex são altíssimos; usar de graça o segundo cérebro é regra
 | Como retomar? | HANDOFF.md |
 | Por que é assim? | decisions/ |
 | O que já erramos/aprendemos? | LESSONS.md |
+| Que termos/palavras usamos? | CONTEXT.md |
 | O que vem? | ROADMAP.md + Plane |
 
 ## Roadmap de autonomia (gatilhos registrados — NÃO construir sem dor real)

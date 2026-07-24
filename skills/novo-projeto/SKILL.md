@@ -15,7 +15,7 @@ Você vai criar um projeto seguindo a convenção Oráculo Flow (regras: `CLAUDE
    - **Monorepo**: crie `projects/<slug>/` na raiz do monorepo.
    - **Multi-repo**: pergunte onde ele guarda os repos, crie `<dir>/<slug>/` e rode `git init`.
 
-   Em ambos, copie de `${CLAUDE_PLUGIN_ROOT}/templates/projeto/` os docs do nível (N1: README+STATUS · N2: +HANDOFF, ROADMAP, decisions/0001-stack.md, LESSONS · N3: tudo · tipo misto: +ARCHITECTURE mesmo em N2). Preencha todos os placeholders `{{...}}`; remova seções marcadas como "remover caso contrário" que não se aplicam.
+   Em ambos, copie de `${CLAUDE_PLUGIN_ROOT}/templates/projeto/` os docs do nível (N1: README+STATUS · N2: +HANDOFF, ROADMAP, decisions/0001-stack.md, LESSONS, CONTEXT · N3: tudo · tipo misto: +ARCHITECTURE mesmo em N2). Preencha todos os placeholders `{{...}}`; remova seções marcadas como "remover caso contrário" que não se aplicam.
 
 3. **F0 — plano visual** — monte o artifact conforme `${CLAUDE_PLUGIN_ROOT}/templates/projeto/plano-visual.md`: carregue a skill `artifact-design`, escreva o HTML no scratchpad e publique via Artifact. Se tem UI e não há design definido: 2–3 variações de mockup por tela-chave, nomeadas, para o usuário escolher. Aguarde a escolha → registre `decisions/0002-design.md`. Ponha o link do artifact no README e ROADMAP.
 

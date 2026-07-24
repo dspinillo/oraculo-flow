@@ -7,7 +7,7 @@
 | Nível | Quando | Docs obrigatórios |
 |---|---|---|
 | **N1** experimento | ideia em teste, pode morrer | `README.md` + `STATUS.md` |
-| **N2** projeto ativo (default) | vai ser usado de verdade | N1 + `HANDOFF.md`, `ROADMAP.md`, `decisions/`, `LESSONS.md` |
+| **N2** projeto ativo (default) | vai ser usado de verdade | N1 + `HANDOFF.md`, `ROADMAP.md`, `decisions/`, `LESSONS.md`, `CONTEXT.md` |
 | **N3** produto | instalado em aparelho de terceiros, ou multi-frente | N2 + `ARCHITECTURE.md`, `PRD.md`, `CHANGELOG.md`, `CLAUDE.md` próprio |
 
 Promoção de nível cruza o critério → registrar como ADR do projeto. Em N3, **CHANGELOG.md é a fonte de verdade do que entrou**; checkboxes de planos podem mentir, ele não.
@@ -67,6 +67,7 @@ Ao **abrir** sessão num projeto: ler `STATUS.md` → `HANDOFF.md` → tarefa at
 
 - **Auto-memory** (`~/.claude/.../memory/`): o não-derivável do repo que é seu e atravessa projetos — paths, package, armadilhas de aparelho, preferências. Fica com você, não viaja no repo.
 - **LESSONS.md** (no projeto): o conhecimento que **deve** viajar com o repo — erros que custaram caro, padrões que funcionaram, armadilhas de ambiente. Agentes consultam antes de começar; o Documenter registra ao fim de um ciclo que ensinou algo. É o que faz uma lição chegar a outra pessoa/máquina que clone o projeto.
+- **CONTEXT.md** (no projeto, N2+): a linguagem ubíqua — o que os termos do domínio significam e a palavra exata no código. Naming consistente entre agentes/sessões e menos token gasto re-explicando jargão. Responde "que palavras usamos"; distinto de decisions (por quê), ARCHITECTURE (como) e LESSONS (o que erramos). Agentes leem antes de codar.
 - Projeto novo ganha memory file `<slug>-project.md` no auto-memory + linha no MEMORY.md.
 
 ## Orquestração multi-agente
